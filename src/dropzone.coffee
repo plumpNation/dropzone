@@ -474,7 +474,7 @@ class Dropzone extends Emitter
     maxfilesexceeded: noop
 
     maxfilesreached: noop
-    
+
     queuecomplete: noop
 
     addedfiles: noop
@@ -1000,6 +1000,8 @@ class Dropzone extends Emitter
     # See https://github.com/enyo/dropzone/pull/226
     img = document.createElement "img"
 
+    img.crossOrigin = if file.crossOrigin != undefined then file.crossOrigin else null;
+
     img.onload = =>
       file.width = img.width
       file.height = img.height
@@ -1021,7 +1023,7 @@ class Dropzone extends Emitter
 
       @emit "thumbnail", file, thumbnail
       callback() if callback?
-      
+
     img.onerror = callback if callback?
 
     img.src = imageUrl

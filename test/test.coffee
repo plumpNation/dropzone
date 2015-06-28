@@ -544,6 +544,7 @@ describe "Dropzone", ->
           size: 2 * 1024 * 1024
           width: 200
           height: 100
+          crossOrigin: ""
         dropzone.options.addedfile.call dropzone, file
 
       describe ".addedFile()", ->
@@ -552,6 +553,7 @@ describe "Dropzone", ->
 
           file.previewElement.querySelector("[data-dz-name]").innerHTML.should.eql "test name"
           file.previewElement.querySelector("[data-dz-size]").innerHTML.should.eql "<strong>2.1</strong> MB"
+          expect(file.previewElement.querySelector("[data-dz-thumbnail]").crossOrigin).to.equal "anonymous";
 
       describe ".error()", ->
         it "should properly insert the error", ->
@@ -1152,7 +1154,7 @@ describe "Dropzone", ->
         dropzone.getFilesWithStatus(Dropzone.ADDED).should.eql [ mock2 ]
         dropzone.getFilesWithStatus(Dropzone.UPLOADING).should.eql [ mock1 ]
         dropzone.getFilesWithStatus(Dropzone.QUEUED).should.eql [ mock3, mock4 ]
-        
+
 
 
 
@@ -1300,7 +1302,7 @@ describe "Dropzone", ->
             ct_callback = callback
 
           sinon.spy dropzone, "createThumbnail"
-          
+
           dropzone.addFile mock1
           dropzone.addFile mock2
           dropzone.addFile mock3
@@ -1318,7 +1320,7 @@ describe "Dropzone", ->
 
             done()
           ), 10
-          
+
 
           # dropzone.addFile mock1
 
@@ -1449,14 +1451,14 @@ describe "Dropzone", ->
           requests[0].onload()
 
           mockFile.status.should.eql Dropzone.UPLOADING
-        
+
           requests[0].readyState = 4
           requests[0].onload()
 
           mockFile.status.should.eql Dropzone.SUCCESS
           done()
         , 10
-      
+
 
       it "should emit error and errormultiple when response was not OK", (done) ->
         dropzone.options.uploadMultiple = yes
